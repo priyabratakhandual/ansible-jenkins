@@ -7,13 +7,6 @@ pipeline {
 
     stages {
 
-        stage('Checkout Ansible Code') {
-            steps {
-                git branch: 'main',
-                    url: 'https://github.com/priyabratakhandual/ansible-jenkins.git'
-            }
-        }
-
         stage('Validate Inventory') {
             steps {
                 sh '''
@@ -33,7 +26,7 @@ pipeline {
         stage('Run Ansible Playbook') {
             steps {
                 sh '''
-                ansible-playbook -i inventory nginx.yaml
+                ansible-playbook -i inventory playbook.yml
                 '''
             }
         }
