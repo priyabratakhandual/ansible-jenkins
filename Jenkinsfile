@@ -17,14 +17,16 @@ pipeline {
 
         stage('Ping Target Servers') {
             steps {
+                sshagent(['ansible-ssh']) {
                 sh '''
                 ansible web -i inventory -m ping
                 '''
             }
-        }
-
+       }    
+   }
         stage('Run Ansible Playbook') {
             steps {
+                sshagent(['ansible-ssh']) {
                 sh '''
                 ansible-playbook -i inventory playbook.yml
                 '''
