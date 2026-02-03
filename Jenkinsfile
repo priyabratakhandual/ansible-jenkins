@@ -32,7 +32,7 @@ pipeline {
                 sshagent(['ansible-ssh']) {
                     sh '''
                     echo "---- Running Ansible Playbook ----"
-                    ansible-playbook -i inventory nginx.yml
+                    ansible-playbook -i inventory nginx.yaml
                     '''
                 }
             }
