@@ -1,0 +1,38 @@
+---
+- name: Install and start Nginx on Ubuntu
+  hosts: web
+  become: yes
+  vars:
+    nginx_package: nginx
+
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: Install Nginx
+      apt:
+        name: "{{ nginx_package }}"
+        state: present
+
+    - name: Start and enable Nginx service
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Allow Nginx through UFW (if enabled)
+      ufw:
+        rule: allow
+        name: "Nginx Full"
+      when: ansible_facts['os_family'] == "Debian"
+
+    - name: Verify Nginx is running
+      shell: systemctl is-active nginx
+      register: nginx_status
+      changed_when: false
+
+    - name: Show Nginx status
+      debug:
+        msg: "Nginx service status: {{ nginx_status.stdout }}"
